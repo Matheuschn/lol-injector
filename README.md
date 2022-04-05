@@ -41,6 +41,16 @@ If you are using Lutris, you may register the executable as a pre-launch script.
 Remember that you may need to set abi.vsyscall32=0, depending on how you installed 
 the game. If you do, create a .sh file (for example, launch.sh) that sets vsyscall32 and then calls the executable.
 
+# Security
+
+The executable does not edit the League client files or its process memory, only 
+the Riot Games Service launcher. It also detaches itself and removes any trace of 
+injection before the League client is finished loading.
+
+Because of this, I'm pretty certain it is safe to do and would not be detected 
+as "cheating" by the League of Legends Anti-Cheat. However, there is no guarantee 
+of this, only my own speculation. So far, no problems have been reported.
+
 # Building
 
 To build on Linux, you will need the frida-core library available [here](https://github.com/frida/frida/releases/download/15.1.17/frida-core-devkit-15.1.17-linux-x86.tar.xz). After downloading it, save it in the lib/frida-core-x86 folder and extract it.
