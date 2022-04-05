@@ -49,7 +49,7 @@ char *getOffsetAddress(char *path, pid_t pid) {
 
   FILE *stream = popen(command, "r");
 
-  char buf[maxPipeSize];
+  char buf[maxPipeSize + 1];
   fgets(buf, maxPipeSize, stream);
   pclose(stream);
 
@@ -67,7 +67,7 @@ DLLInfo *getProcessMemoryMap(pid_t pid) {
 
   FILE *stream = popen(command, "r");
 
-  char buf[maxPipeSize];
+  char buf[maxPipeSize + 1];
   fgets(buf, maxPipeSize, stream);
   pclose(stream);
 
@@ -102,7 +102,7 @@ char *getAppPort(pid_t pid) {
 
   FILE *stream = popen(command, "r");
 
-  char buf[maxPipeSize];
+  char buf[maxPipeSize + 1];
   fgets(buf, maxPipeSize, stream);
   pclose(stream);
 
@@ -137,4 +137,19 @@ pid_t getPID(char *process_name, char *alt_name) {
   }
 
   return pid;
+}
+
+int hasptrace(char *path) {
+  char command[7 + maxPathSize + 1] = "getcap ";
+  strcat(command, path);
+
+  FILE *cmd_pipe = popen(command, "r");
+
+  char buf[maxPipeSize + 1];
+  fgets(buf, maxPipeSize, cmd_pipe);
+  pclose(cmd_pipe);
+
+  char *found = strstr(buf, "cap_sys_ptrace=eip");
+
+  return found != NULL ? 1 : 0;
 }

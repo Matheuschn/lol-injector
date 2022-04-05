@@ -20,3 +20,5 @@ DLLInfo *getProcessMemoryMap(pid_t pid);
 char *getAppPort(pid_t pid);
 
 pid_t getPID(char *process_name, char *alt_name);
+
+int hasptrace(char *path);

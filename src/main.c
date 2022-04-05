@@ -6,7 +6,7 @@
 #include <unistd.h>
 
 int main(int argc, char **argv) {
-  if (geteuid() != 0) {
+  if (geteuid() != 0 && !hasptrace(argv[0])) {
     char command[7 + maxPathSize + 1] = "pkexec ";
     strcat(command, argv[0]);
 
