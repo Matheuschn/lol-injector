@@ -18,8 +18,8 @@
 
 # Libraries
 *.lib
-*.a
 *.la
+libfrida-core.a
 *.lo
 
 # Shared objects (inc. Windows DLLs)
