@@ -5,14 +5,15 @@ UTILSDIR := utils
 BINDIR := bin
 
 CC := gcc
-LDFLAGS := -L./$(LIBDIR)/frida-core-x86 -lfrida-core -lssl
+LDFLAGS := $(addprefix -L./, $(wildcard $(LIBDIR)/*/)) -lfrida-core -lssl -lcrypto -ldl
 CFLAGS := -Wall -m32 -fuse-ld=gold -Wl,--icf=all,--gc-sections,-z,noexecstack \
-		  -Os -s -ffast-math
+		  -Os -s -ffast-math -pthread -ffunction-sections -fdata-sections \
+		  -static-libgcc
 
 SRC := $(foreach x, $(SOURCEDIR), $(wildcard $(addprefix $(x)/*,.c*)))
 OBJ := $(addprefix $(BUILDDIR)/, $(addsuffix .o, $(notdir $(basename $(SRC)))))
 
-default: makedir all
+default: all
 
 launchhelper: $(OBJ)
 	$(CC) $(CFLAGS) $(OBJ) -o $(BINDIR)/$@ $(LDFLAGS) 
@@ -25,10 +26,10 @@ makedir:
 	mkdir -p $(BUILDDIR) $(BINDIR)
 
 .PHONY: all
-all: launchhelper
+all: makedir launchhelper
 
 .PHONY: dist
-dist: launchhelper
+dist: all
 	$(UTILSDIR)/upx -9 $(BINDIR)/launchhelper
 
 .PHONY: clean
